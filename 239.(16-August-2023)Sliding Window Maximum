@@ -1,0 +1,28 @@
+#include <vector>
+#include <deque>
+
+class Solution {
+public:
+    std::vector<int> maxSlidingWindow(std::vector<int>& nums, int k) {
+        std::vector<int> result;
+        std::deque<int> window;  // Store indices of elements in the current window
+
+        for (int i = 0; i < nums.size(); ++i) {
+            // Remove elements that are out of the current window
+            while (!window.empty() && window.front() <= i - k)
+                window.pop_front();
+
+            // Remove elements that are smaller than the current element
+            while (!window.empty() && nums[window.back()] < nums[i])
+                window.pop_back();
+
+            window.push_back(i);
+
+            // When the window is of size k, add the maximum element to the result
+            if (i >= k - 1)
+                result.push_back(nums[window.front()]);
+        }
+
+        return result;
+    }
+};
